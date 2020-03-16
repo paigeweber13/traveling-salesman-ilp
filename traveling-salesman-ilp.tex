@@ -12,8 +12,36 @@
 \begin{document}
 \section{Problem Description}
 \begin{tabular}{l p{10cm}}
-  \textbf{Input:} & A graph $G = (V, E)$ with length on the edges $l_{ij}$ \\
+  \textbf{Input:} & A graph $G = (V, E)$ with $n$ vertices and length on the
+  edges $l_{ij}$ \\
   \textbf{Output:} & A path that goes through each vertex.\\
   \textbf{Metric:} & Minimize the length of the path\\
 \end{tabular}
+
+A solution to the traveling salesman problem is frequently called a Hamiltonian
+tour
+
+\section{ILP Formulation}
+The graph is represented as an adjacency matrix
+
+$x_{ij}$ is $1$ if the edge is part of the tour and $0$ otherwise.
+
+\subsection{Undirected Graph: the symmetric traveling salesman problem (sTSP)}
+\begin{tabular}{l p{10cm}}
+  \textbf{Minimize:} & $\sum_{i}^{n} \sum_{j}^{n} x_{ij} l_{ij}$ \\
+  \textbf{Subject to:} & $\forall{(i, j) \in V}$ $x_{ij} \in {0, 1}$ \\
+  & (limiting values of x) \\
+  & \\
+  & $\forall{k \in V}$ $\sum_{i=1}^{i<k} x_{ij}$ + $\sum_{j=k+1}^{j \leq n}
+  x_{ij} = 2$ \\
+  & (every node in the upper diagonal must have something going in and
+  something going out) \\
+  & \\
+  & $\forall {S}$ such that $ S \subset V$ and $3 \leq |S| \leq n - 3$ \\
+  & $\forall{(i, j) \in S}$ \\
+  & $\sum_{i} \sum_{j} x_{ij} \leq |S| - 1$ \\
+  & (eliminating subtours: for every subset $S$ of $V$, the number of
+  connections between them is less than the number of vertices in $S$) \\
+\end{tabular}
+
 \end{document}
