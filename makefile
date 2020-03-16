@@ -1,16 +1,19 @@
 CXX=g++
-CXXFLAGS=-g -Wall -std=c++1y -I$(INC_DIR) 
-LDFLAGS=-L$(LIB_DIR) $(LIBS)
+CXXFLAGS=-g -Wall -std=c++1y $(INC_DIRS) 
+LDFLAGS=$(LIB_DIRS) $(LIBS)
 PERFOPTS=-march=native -mtune=native -fopenmp -O3 
 CXXASSEMBLYFLAGS=-S -g -fverbose-asm
 
-# make sure likwid is installed to this prefix
-# manual install to this directory is preferred because then we can run without
-# sudo permission
-PREFIX=/usr/local
-INC_DIR=$(PREFIX)/include
-LIB_DIR=$(PREFIX)/lib
-LIBS=
+INC_DIRS=-I./lib
+LIB_DIRS=
+
+# for example LIBS=-lboost_program_options -llikwid
+LIBS=-lglpk
+
+# if there are other dependencies:
+# PREFIX=/usr/local
+# INC_DIR+=-I$(PREFIX)/include
+# LIB_DIR+=-L$(PREFIX)/lib
 
 MAIN_DIR=src
 SRC_DIR=lib
@@ -43,7 +46,7 @@ TEST_EXEC=$(EXEC_DIR)/$(TEST_EXEC_NAME)
 ### meta-rules for easier calling
 build: $(EXEC) $(TEST_EXEC)
 
-tests: $(TEST_EXEC)
+test: $(TEST_EXEC)
 	$(TEST_EXEC)
 
 assembly: $(ASM) 
