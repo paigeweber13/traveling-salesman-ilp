@@ -1,3 +1,29 @@
+############ CPP THINGS ############ 
+# binaries and intermediate files
+bin
+obj
+
+# torq
+*.e*
+*.o*
+
+# fhv output
+*.json
+
+# data and plots
+*.csv
+*.png
+
+# archives
+*.tar.gz
+
+# assembly
+asm
+
+# editor settings
+.vscode
+
+############ TEX THINGS ############ 
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
