@@ -24,15 +24,16 @@ TEST_EXEC_DIR=$(EXEC_DIR)/tests
 TEST_DIR=tests
 
 SOURCES=$(wildcard lib/*.cpp)
-HEADERS=$(wildcard lib/*.h)
+HEADERS=$(wildcard lib/*.hpp)
 MAINS=$(wildcard src/*.cpp)
 TEST_LIBS=$(wildcard tests/*.cpp)
-TEST_LIB_HEADERS=$(wildcard tests/*.h)
+TEST_LIB_HEADERS=$(wildcard tests/*.hpp)
 
 LIB_OBJS=$(SOURCES:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
+TEST_OBJS+=$(TEST_LIBS:$(TEST_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 OBJS=$(LIB_OBJS)
+OBJS+=$(TEST_OBJS)
 OBJS+=$(MAINS:$(MAIN_DIR)/%.cpp=$(OBJ_DIR)/%.o)
-OBJS+=$(TEST_LIBS:$(TEST_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 
 ASM=$(SOURCES:$(SRC_DIR)/%.cpp=$(ASM_DIR)/%.s)
 ASM+=$(MAINS:$(MAIN_DIR)/%.cpp=$(ASM_DIR)/%.s)
@@ -86,7 +87,7 @@ endef
 $(EXEC): $(OBJ_DIR)/main-tsp-ilp.o $(LIB_OBJS) | $(EXEC_DIR)
 	$(ld-command)
 
-$(TEST_EXEC): $(OBJ_DIR)/main-test.o $(LIB_OBJS) | $(EXEC_DIR)
+$(TEST_EXEC): $(OBJ_DIR)/main-test.o $(LIB_OBJS) $(TEST_OBJS) | $(EXEC_DIR)
 	$(ld-command)
 
 ### rules to compile sources
