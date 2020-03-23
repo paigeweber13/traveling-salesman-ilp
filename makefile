@@ -47,6 +47,9 @@ TEST_EXEC=$(EXEC_DIR)/$(TEST_EXEC_NAME)
 ### meta-rules for easier calling
 build: $(EXEC) $(TEST_EXEC)
 
+glpsol:
+	glpsol --math tsp-undirected.mod
+
 test: $(TEST_EXEC)
 	$(TEST_EXEC)
 
