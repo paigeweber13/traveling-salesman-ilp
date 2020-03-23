@@ -26,18 +26,21 @@ int main(){
   /* create problem */
   tsp = glp_create_prob();
   glp_set_prob_name(tsp, "tsp");
-  glp_set_obj_dir(tsp, GLP_MAX);
+  glp_set_obj_dir(tsp, GLP_MIN);
 
   /* fill problem */
   // rows are constraints (such that)
   // there should be more than this... because there's an exponential number of
   // constraints. For each subset of V
-  glp_add_rows(tsp, 2);
-  glp_set_row_name(tsp, 1, "x_constraints");
-  glp_set_row_bnds(tsp, 1, GLP_FX, 0.0, 0.0);
-  glp_set_row_bnds(tsp, 1, GLP_FX, 1.0, 0.0);
-  glp_set_row_name(tsp, 2, "enforce_one_in_one_out");
-  glp_set_row_bnds(tsp, 2, GLP_FX, 2.0, 0.0);
+
+  // every node has to have something going in and something going out
+  // row for every node
+  glp_add_rows(tsp, n);
+  for (unsigned i = 1; i < 1 + n; i++){
+    // sum of x_ij is 2 on each of these rows
+    glp_set_row_bnds(tsp, i, GLP_FX, 2.0, 0.0);
+  }
+
   // glp_set_row_name(tsp, 2, "eliminating_subtours");
   // glp_set_row_bnds(tsp, 2, GLP_UP, 0.0, s);
 
