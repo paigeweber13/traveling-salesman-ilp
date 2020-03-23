@@ -2,7 +2,8 @@
 
 void init()
 {
-  weighted_ugraph g(5, 5);
+  int n = 5;
+  weighted_ugraph g(n, n);
 
   // in this graph, shortest tour is 3, 0, 1, 2, 4 with cost 13
   //r, c
@@ -23,7 +24,6 @@ void init()
 TEST_CASE( "Adjacency matrix is converted to glpk problem", 
            "[tsp-conversion]" )
 {
-  init();
 
   // REQUIRE( tsp_matrix_to_ilp() == )
 }
