@@ -28,3 +28,15 @@ project
  - so the matrix is a list of linear equations, right? So I guess the sum of
    all $x_{ij}$ would be to list every $x_{ij}$ and then say the constraint is
    equal to 2?
+
+# Help from Erik
+l_ij is a coefficient in one constraint
+x_ij are the variables
+ - need one variable for every edge
+
+2nd constraint
+ - will need a row for every k 
+ - constraint isn't exactly right, should be sum ik and sum kj
+ the sum of x_e for an incident edge is 2.
+
+\sum_{i \in S} \sum_{j \in S} \leq |S|-1
