@@ -38,5 +38,3 @@ x_ij are the variables
  - will need a row for every k 
  - constraint isn't exactly right, should be sum ik and sum kj
  the sum of x_e for an incident edge is 2.
-
-\sum_{i \in S} \sum_{j \in S} \leq |S|-1
