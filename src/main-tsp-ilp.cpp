@@ -1,4 +1,5 @@
 #include <glpk.h>
+#include <iostream>
 #include <limits>
 #include <vector>
 
@@ -13,16 +14,16 @@ int main(){
   // one edge: {start_node, end_node, weight}
   // edges are assumed to be bidirectional
   vector<vector<int>> g(e);
-  g.push_back({1, 2, 1});
-  g.push_back({1, 4, 2});
-  g.push_back({1, 5, 7});
+  g[0] = {1, 2, 1};
+  g[1] = {1, 4, 2};
+  g[2] = {1, 5, 7};
 
-  g.push_back({2, 3, 6});
-  g.push_back({2, 4, 3});
+  g[3] = {2, 3, 6};
+  g[4] = {2, 4, 3};
 
-  g.push_back({3, 5, 4});
+  g[5] = {3, 5, 4};
 
-  g.push_back({4, 5, 10});
+  g[6] = {4, 5, 10};
 
   // in this graph, shortest tour is 3, 0, 1, 2, 4 with cost 13
   //r, c
@@ -42,8 +43,6 @@ int main(){
   int ia[1+1000], ja[1+1000];
   double ar[1+1000];
   size_t index = 1;
-
-  double z, x1, x2;
 
   /* create problem */
   tsp = glp_create_prob();
@@ -70,9 +69,16 @@ int main(){
   for (size_t k = 1; k < 1 + n; k++){
     // sum of x_kj ks 2 on each of these rows
     glp_set_row_bnds(tsp, k, GLP_FX, 2.0, 0.0);
+    glp_set_row_name(tsp, k,
+      ("ensuring connectedness for k = " + to_string(k)).c_str());
+
+    cout << "g size: " << g.size() << " \n";
     for(size_t i = 0; i < g.size(); i++){
-      if(g[i][0] == k || g[i][1] == k){
-        ia[index] = k, ja[index] = i + 1, ar[index] = g[i][2];
+      cout << "g[i] size: " << g[i].size() << " \n";
+      if(g[i][0] == int(k) || g[i][1] == int(k)){
+        // don't use the weights, just use 1 because we want x_ij to be summed
+        // here, not the weight
+        ia[index] = k, ja[index] = i + 1, ar[index] = 1;
       }
       else{
         ia[index] = k, ja[index] = i + 1, ar[index] = inf;
@@ -81,30 +87,24 @@ int main(){
     }
   }
 
-  // glp_set_row_name(tsp, 2, "eliminating_subtours");
-  // glp_set_row_bnds(tsp, 2, GLP_UP, 0.0, s);
-
-  // columns are variables
-  // glp_add_cols(tsp, pow(n, 2));
-  // for (size_t i = 1; i < 1 + pow(n, 2); i++){
-  //   glp_set_col_bnds(tsp, 1, GLP_LO, 0.0, 0.0);
-  // }
-
-  ia[3] = 1, ja[3] = 2, ar[3] = 6.0; 
-  ia[4] = 1, ja[4] = 3, ar[4] = 3.0; 
-
-  ia[5] = 2, ja[5] = 4, ar[5] = 4.0; 
-
-  ia[6] = 3, ja[6] = 4, ar[6] = 10.0; 
   glp_load_matrix(tsp, 4, ia, ja, ar);
 
   /* solve problem */
   glp_simplex(tsp, NULL);
   /* recover and display results */
-  z = glp_get_obj_val(tsp);
-  x1 = glp_get_col_prim(tsp, 1);
-  x2 = glp_get_col_prim(tsp, 2);
-  // printf("z = %g; x1 = %g; x2 = %g\n", z, x1, x2);
+  double z = glp_get_obj_val(tsp);
+  cout << "total weight of tour: " << z << "\n";
+
+  for(size_t i = 1; i < size_t(glp_get_num_cols(tsp)) + 1; i++){
+    double x = glp_get_col_prim(tsp, i);
+    cout << "column " << i << " has value " << x << "\n";
+  }
+
+  for(size_t i = 1; i < size_t(glp_get_num_rows(tsp)) + 1; i++){
+    double x = glp_get_row_prim(tsp, i);
+    cout << "row " << i << " has value " << x << "\n";
+  }
+
   /* housekeeping */
   glp_delete_prob(tsp);
   glp_free_env();
