@@ -28,6 +28,8 @@ project
  - so the matrix is a list of linear equations, right? So I guess the sum of
    all $x_{ij}$ would be to list every $x_{ij}$ and then say the constraint is
    equal to 2?
+   - so only list the edges that don't have that k could be given a constant of
+     infinity
 
 # Help from Erik
 l_ij is a coefficient in one constraint
