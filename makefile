@@ -50,6 +50,9 @@ build: $(EXEC) $(TEST_EXEC)
 glpsol:
 	glpsol --math tsp-undirected.mod
 
+run: $(EXEC)
+	$(EXEC)
+
 test: $(TEST_EXEC)
 	$(TEST_EXEC)
 
